@@ -7,35 +7,123 @@
     }
     h1 
     {
-        color: rgba(79, 237, 79, 0.774);
+        color: #4fed4f;
         text-align: center;
-        padding-top: 20px;
-        font-size: 60px;       
+        padding-top: 60px;
+        font-size: 50px;
+        
+        text-shadow:
+        0 0 10px rgba(79, 237, 79, 0.5),
+        0 0 25px rgba(79, 237, 79, 0.2);
     }
     h2 
     {
-        color: rgba(79, 237, 79, 0.774);
+        color: rgba(229, 8, 236, 0.774);
         text-align: center;
-        padding: 0px;
-        font-size: 40px;       
+        padding: 15px 20px;
+        font-size: 26px;
+        
+        text-shadow:
+        0 0 8px rgba(229, 8, 236, 0.4);
+
+        max-width: 900px;
+        margin: 0 auto;
     }
     p
     {
-        color: rgba(79, 237, 79, 0.774);
+        color: #b8b8b8;
+
         text-align: center;
-        padding: 50px;
+        padding: 10px 20px;
+
+        font-size: 18px;
+        line-height: 1.7;
+
+        max-width: 800px;
+        margin: 20px auto;
     }
     nav 
     {
         display: flex;
-        gap: 20px;
+        gap: 30px;
         justify-content: center;
+
+        padding: 20px;
+        background-color: #080808;
+        border-bottom: 1px solid rgba(79, 237, 79, 0.3);
     }
     nav a 
     {
+        color: #4fed4f;
+        text-decoration: none;
+
         font-size: 20px;
-        padding: 10px 20px;
-    }                        
+        padding: 10px 15px;
+
+        transition: 0.3s;
+    }
+    nav a:hover 
+    {
+        color: white;
+
+        text-shadow:
+            0 0 5px #4fed4f,
+            0 0 15px #4fed4f;
+    }
+        .features
+    {
+        display: flex;
+        justify-content: center;
+        gap: 25px;
+
+        margin-top: 40px;
+        padding: 20px;
+    }
+
+    .feature
+    {
+        width: 280px;
+
+        background-color: #0c0c0c;
+
+        border: 1px solid rgba(79, 237, 79, 0.3);
+        border-radius: 10px;
+
+        padding: 25px;
+
+        text-align: center;
+
+        transition: 0.3s;
+}
+
+.feature h3
+{
+    color: #4fed4f;
+    font-size: 22px;
+
+    margin-bottom: 15px;
+}
+
+.feature p
+{
+    color: #aaaaaa;
+
+    font-size: 16px;
+    line-height: 1.6;
+
+    padding: 0;
+}
+
+.feature:hover
+{
+    transform: translateY(-8px);
+
+    border-color: #4fed4f;
+
+    box-shadow:
+        0 0 10px rgba(79, 237, 79, 0.3),
+        0 0 25px rgba(79, 237, 79, 0.1);
+}                      
 </style>
 <head>
     <meta charset="UTF-8">
@@ -45,20 +133,51 @@
 <body>
     <header>
         <h1>
-            Welcome to the Shadow Library
+            Welcome to the Midnight Library
         </h1>
         <h2>
             Quite dark isn't it? That's the point of this website! So that you can read in the dark without a blinding flash of light.
         </h2>
+        <p>
+            This site can be used as a notepad or an archive and whatnot. Store your stories or whatever wall of text in here if you want and be able to access anytime. Our specialty is "Do it in the dark".
+            Only one rule: There is no light theme.
+            So have fun and make sure to share this to others.
+        </p>
+    </header>
+    <section class="features">
+
+        <div class="feature">
+            <h3>📖 Write</h3>
+            <p>
+            Write stories, notes, ideas, or whatever comes to mind.
+            The Midnight Library is your personal space for words.
+            </p>
+        </div>
+
+        <div class="feature">
+        <h3>🗄️ Archive</h3>
+            <p>
+            Keep your writings organized and accessible whenever
+            you return to the library.
+            </p>
+        </div>
+
+        <div class="feature">
+            <h3>🌙 Stay in the Dark</h3>
+            <p>
+            No bright screens. No light theme. Just a dark,
+            comfortable environment designed for reading and writing.
+            </p>
+        </div>
+
+    </section>
+    <header>
         <nav>
             <a href="#">Home</a>
             <a href="#">Notes</a>
             <a  href="#">About Us</a>
             <a href="#">Contact Us</a>
         </nav>
-        <p>
-            This site can be used as a notepad or an archive and whatnot. Store your stories or whatever ideas in here if you want. Our specialty is "Do it in the dark"
-        </p>
     </header>
 </body>
 </html>
