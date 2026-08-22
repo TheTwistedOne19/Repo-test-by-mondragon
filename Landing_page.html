@@ -70,7 +70,7 @@
             0 0 5px #4fed4f,
             0 0 15px #4fed4f;
     }
-        .features
+    .features
     {
         display: flex;
         justify-content: center;
@@ -94,36 +94,120 @@
         text-align: center;
 
         transition: 0.3s;
-}
+    }
 
-.feature h3
-{
-    color: #4fed4f;
-    font-size: 22px;
+    .feature h3
+    {
+        color: #4fed4f;
+        font-size: 22px;
 
-    margin-bottom: 15px;
-}
+        margin-bottom: 15px;
+    }
 
-.feature p
-{
-    color: #aaaaaa;
+    .feature p
+    {
+        color: #aaaaaa;
 
-    font-size: 16px;
-    line-height: 1.6;
+        font-size: 16px;
+        line-height: 1.6;
 
-    padding: 0;
-}
+        padding: 0;
+    }
 
-.feature:hover
-{
-    transform: translateY(-8px);
+    .feature:hover
+    {
+        transform: translateY(-8px);
 
-    border-color: #4fed4f;
+        border-color: #4fed4f;
 
-    box-shadow:
+        box-shadow:
         0 0 10px rgba(79, 237, 79, 0.3),
         0 0 25px rgba(79, 237, 79, 0.1);
-}                      
+    }
+    .login-button
+    {
+        display: block;
+        width: fit-content;
+        margin: 40px auto;
+        padding: 15px 30px;
+        color: #4fed4f;
+        background-color: transparent;
+        border: 2px solid #4fed4f;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 20px;
+        transition: 0.3s;
+    }
+    .login-button:hover:not(.exploding)
+    {
+       animation: shake 0.2s infinite;
+    }
+    .login-button.exploding,
+    .login-button.exploding:hover
+    {
+        animation: explode 1s forwards !important;
+        pointer-events: none;
+    }
+    @keyframes shake
+    {
+        0% { transform: translatex(0px); }
+        15% { transform: translatey(-1.5px); }
+        25% { transform: translatex(1.5px); }
+        35% { transform: translatey(1.5px); }
+        50% { transform: translatex(-1.5px); }
+        65% { translate: translatey(-1.5px); }
+        75% { transform: translatex(1.5px); }
+        100% {translate: translatex(0px); }
+    }
+    #blackhole
+    {
+        position: fixed;
+        
+        top: 50%;
+        left: 50%;
+
+        width: 0;
+        height: 0;
+
+        border-radius: 50%;
+
+        background-color: black;
+
+        transform: translate(-50%, -50%);
+
+        z-index: 99999;
+
+        pointer-events: none;
+    }
+    #blackhole.engulf
+    {
+        animation: engulfScreen 1.5s forwards;
+    }   
+    @keyframes engulfScreen
+    {
+        0%
+        {
+            width: 0;
+            height: 0;
+
+            box-shadow:
+                0 0 20px #4fed4f,
+                0 0 40px #e508ec;
+        }
+        40%
+        {
+            box-shadow:
+                0 0 50px #4fed4f,
+                0 0 100px #e508ec;
+        }
+        100%
+        {
+            width: 300vmax;
+            height: 300vmax;
+            box-shadow: 0 0 100px black;
+        }
+
+    }        
 </style>
 <head>
     <meta charset="UTF-8">
@@ -131,6 +215,7 @@
     <title>Document</title>
 </head>
 <body>
+    
     <header>
         <h1>
             Welcome to the Midnight Library
@@ -171,6 +256,9 @@
         </div>
 
     </section>
+    <nav>
+        <a href="login.html" class="login-button" id="loginButton"> Enter the Library</a>
+    </nav>
     <header>
         <nav>
             <a href="#">Home</a>
@@ -179,5 +267,22 @@
             <a href="#">Contact Us</a>
         </nav>
     </header>
+    <div id="blackhole"></div>
+    
+    <script>
+    const loginButton = document.getElementById("loginButton")
+    const blackhole = document.getElementById("blackhole")
+
+    loginButton.addEventListener("click", function(event)
+    {
+        event.preventDefault();
+        blackhole.classList.add("engulf");
+        setTimeout(function()
+        {
+            window.location.href = "login.html";
+        }, 1500);
+        
+    });
+    </script>
 </body>
 </html>
