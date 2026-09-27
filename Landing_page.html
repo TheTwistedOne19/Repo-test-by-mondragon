@@ -139,15 +139,9 @@
         font-size: 20px;
         transition: 0.3s;
     }
-    .login-button:hover:not(.exploding)
+     .login-button:hover:not(.engulfing)
     {
        animation: shake 0.2s infinite;
-    }
-    .login-button.exploding,
-    .login-button.exploding:hover
-    {
-        animation: explode 1s forwards !important;
-        pointer-events: none;
     }
     @keyframes shake
     {
@@ -225,9 +219,8 @@
             Quite dark isn't it? That's the point of this website! So that you can read in the dark without a blinding flash of light.
         </h2>
         <p>
-            This site can be used as a notepad or an archive and whatnot. Store your stories or whatever wall of text in here if you want and be able to access anytime. Our specialty is "Do it in the dark".
+            This site can be used as a notepad or an archive and whatnot. Store your stories or whatever wall of text in here if you want and be able to access it anytime or share them publicly or privately. Our specialty is "Do it in the dark".
             Only one rule: There is no light theme.
-            So have fun and make sure to share this to others.
         </p>
     </header>
     <section class="features">
@@ -235,8 +228,8 @@
         <div class="feature">
             <h3>📖 Write</h3>
             <p>
-            Write stories, notes, ideas, or whatever comes to mind.
-            The Midnight Library is your personal space for words.
+            Write stories, notes, ideas, writing styles, or whatever comes to mind.
+            The Library is built for those needs.
             </p>
         </div>
 
@@ -244,15 +237,14 @@
         <h3>🗄️ Archive</h3>
             <p>
             Keep your writings organized and accessible whenever
-            you return to the library.
+            you return to the Library. You may share it publicly or just keep things in private.
             </p>
         </div>
 
         <div class="feature">
             <h3>🌙 Stay in the Dark</h3>
             <p>
-            No bright screens. No light theme. Just a dark,
-            comfortable environment designed for reading and writing.
+            No bright screens. No light theme. Just a dark environment designed for comfortable reading and writing.
             </p>
         </div>
 
@@ -281,8 +273,7 @@
         setTimeout(function()
         {
             window.location.href = "login.html";
-        }, 1500);
-        
+        }, 1500);        
     });
     </script>
 </body>

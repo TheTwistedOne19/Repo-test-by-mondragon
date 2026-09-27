@@ -35,17 +35,19 @@
         padding: 40px;
         text-align: center;
 
-        background-color: #0c0c0c;
+        background-color: #0c0c0cc1;
         border: 1px solid rgba(79, 237, 79, 0.3);
         border-radius: 15px;
         box-shadow: 
             0 0 30px rgba(79, 237, 79, 0.08),
             0 0 80px rgba(79, 237, 79, 0.05);
+        
     }
     form
     {
         display: flex;
         flex-direction: column;
+        align-items: center;
 
         gap: 15px;
 
@@ -53,8 +55,9 @@
     }
     input
     {
-        width: 100px;
+        width: 200px;
         padding: 14px;
+        box-sizing: border-box;
 
         background-color: #080808;
         color: white;
@@ -115,7 +118,7 @@
         color: #4fed4f;
         text-shadow: 0 0 8px rgb(79, 237, 79, 0.5);
     }
-    #floatingletters
+    #floatingcharacters
     {
         position: fixed;
 
@@ -129,9 +132,11 @@
 
         overflow: hidden;
     }
-    .letter
+    .character
     {
         position: absolute;
+
+        text-shadow: 0 0 3px rgba(249, 248, 248, 0.772);
 
         pointer-events: none;
 
@@ -140,7 +145,7 @@
 
     @keyframes drift
     {
-        from
+        0%
         {
             transform:
             translate(var(--startX), var(--startY))
@@ -148,24 +153,25 @@
 
             opacity: 0;
         }
-
         10%
         {
           opacity: 1;
         }
-
-        to
+        90%
+        {
+            opacity: 1;
+        }
+        100%
         {
             transform:
                 translate(var(--endX), var(--endY))
                 rotate(var(--rotation));
-
             opacity: 0;
         }
     }
 </style>
 <body>
-    <div id="floatingletters"></div>
+    <div id="floatingcharacters"></div>
     <div class="login-container">
         <h1>
             Welcome Back!
@@ -173,14 +179,14 @@
         <p>
             The library has been expecting you
         </p>
-        <form>
+        <form id="loginform">
             <input
-                type="text"
+                type="text" name="username"
                 placeholder="Username"
                 required
             >
             <input
-                type="password"
+                type="password" name="password"
                 placeholder="Password"
                 required
             >
@@ -188,24 +194,27 @@
                 Enter
             </button>
             <p class="signup-text">
-                Don't have an account?
+                Oh, you're new? Get in here:
                 <a href="signup.html">Sign Up</a>
             </p>
         </form>
     </div>
     <script>
-        const floatingletters = document.getElementById("floatingletters");
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        const floatingcharacters = document.getElementById("floatingcharacters");
+        const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*?|{}:;',.~`<>[]";
         const colors = ["rgba(229, 8, 236, 0.774)", "rgba(79, 237, 79, 0.6)", "rgba(79, 218, 237, 0.6)", 
                         "rgba(226, 237, 79, 0.9)", "rgba(56, 15, 243, 0.9)", "rgba(205, 202, 216, 0.9)",
-                        "rgba(152, 152, 152, 0.9)", "rgba(42, 42, 42, 0.9)"]
-
-        function createLetter()
+                        "rgba(152, 152, 152, 0.9)", "rgba(42, 42, 42, 0.9)", "rgb(0, 0, 0)"]
+        const fonts = ["'Courier New', Courier, monospace", "'Times New Roman', Times, serif", "'Courier New', Courier, monospace", 
+                    "'Gill Sans', 'Gill Sans MT', Calibri", "'Trebuchet MS', sans-serif", "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande'", 
+                    "'Lucida Sans Unicode', Geneva, Verdana, sans-seri", "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+                    "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"]
+        function createCharacter()
         {
-            const letter = document.createElement("span");
-            letter.classList.add("letter");
+            const character = document.createElement("span");
+            character.classList.add("character");
 
-            letter.textContent = letters[Math.floor(Math.random() * letters.length)];
+            character.textContent = characters[Math.floor(Math.random() * characters.length)];
 
             const side = Math.floor(Math.random() * 4);
 
@@ -236,7 +245,7 @@
             }
             else if (side === 2)
             {
-                startX = Math.random() * window.innerHeight;
+                startX = Math.random() * window.innerWidth;
 
                 startY = window.innerWidth + 50;
 
@@ -254,33 +263,61 @@
 
                 endY = startY + (Math.random() * 300 - 150);
             }
-            letter.style.left = "0px";
-            letter.style.top = "0px";
+            character.style.left = "0px";
+            character.style.top = "0px";
 
-            letter.style.setProperty("--startX", startX + "px");
+            character.style.setProperty("--startX", startX + "px");
 
-            letter.style.setProperty("--startY", startY + "px");
+            character.style.setProperty("--startY", startY + "px");
 
-            letter.style.setProperty("--endX", endX + "px");
+            character.style.setProperty("--endX", endX + "px");
 
-            letter.style.setProperty("--endY", endY + "px");
+            character.style.setProperty("--endY", endY + "px");
 
-            letter.style.fontSize = 5 + Math.random() * 50 + "px";
+            character.style.fontSize = 5 + Math.random() * 200 + "px";
 
-            letter.style.color = colors[Math.floor(Math.random() * colors.length)];
+            character.style.color = colors[Math.floor(Math.random() * colors.length)];
 
-            letter.style.animationDuration = 6 + Math.random() * 8 + "s";
+            character.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
-            letter.style.setProperty("--rotation", Math.random() * 720 - 360 + "deg");
+            character.style.animationDuration = 6 + Math.random() * 8 + "s";
 
-            floatingletters.appendChild(letter);
+            character.style.setProperty("--rotation", Math.random() * 720 - 360 + "deg");
 
-            letter.addEventListener("animationed", function()
+            floatingcharacters.appendChild(character);
+
+            character.addEventListener("animationend", function()
             {
-                letter.remove;
+                character.remove();
             });
         }
-        setInterval(createLetter, 250);
+        setInterval(createCharacter, 300);
+
+        const loginform = document.getElementById("loginform");
+
+        loginform.addEventListener("submit", function(event)
+        {
+            event.preventDefault();
+
+            const username = loginform.elements["username"].value;
+            const password = loginform.elements["password"].value;
+
+            const savedAccount = JSON.parse(localStorage.getItem("account"));
+
+            if (savedAccount == null)
+            {
+                alert("No account has been created yet!")
+                return;
+            }
+            if (username === savedAccount.username && password === savedAccount.password)
+            {
+                alert("Login succesful!");
+            }
+            else
+            {
+                alert("Incorrect password or username!");
+            }
+        });
     </script>
 </body>
 </html>
