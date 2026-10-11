@@ -13,7 +13,7 @@
     body
     {
         background-color: black;
-        color: rgba(229, 8, 236, 0.774);
+        color: rgba(185, 165, 214, 0.3);
 
         min-height: 100vh;
         margin: 0;
@@ -35,12 +35,12 @@
         padding: 40px;
         text-align: center;
 
-        background-color: #0c0c0cc1;
-        border: 1px solid rgba(79, 237, 79, 0.3);
+        background-color: #17131Fc1;
+        border: 1px solid rgba(185, 165, 214, 0.3);
         border-radius: 15px;
         box-shadow: 
-            0 0 30px rgba(79, 237, 79, 0.08),
-            0 0 80px rgba(79, 237, 79, 0.05);
+            0 0 30px rgba(185, 165, 214, 0.08),
+            0 0 80px rgba(185, 165, 214, 0.05);
     }
     form
     {
@@ -61,7 +61,7 @@
         background-color: #080808;
         color: white;
 
-        border: 1px solid rgba(79, 237, 79, 0.4);
+        border: 1px solid rgba(185, 165, 214, 0.4);
         border-radius: 8px;
 
         font-size: 16px;
@@ -74,17 +74,17 @@
     }
     input:focus
     {
-        border-color: #4fed4f;
-        box-shadow: 0 0 8px rgba(79, 237, 79, 0.3);
+        border-color: #B9A5D6;
+        box-shadow: 0 0 8px rgba(185, 165, 214, 0.3);
     }
     button
     {
         padding: 14px;
 
         background-color: transparent;
-        color: #4fed4f;
+        color: #B9A5D6;
 
-        border: 2px solid #4fed4f;
+        border: 2px solid #B9A5D6;
         border-radius: 8px;
 
         font-size: 18px;
@@ -94,11 +94,11 @@
     }
     button:hover
     {
-        background-color: #4fed4f;
+        background-color: #B9A5D6;
         color: black;
         box-shadow:
-            0 0 10px rgba(79, 237, 79, 0.5)
-            0 0 25px rgba(79, 237, 79, 0.2)
+            0 0 10px rgba(185, 165, 214, 0.5)
+            0 0 25px rgba(185, 165, 214, 0.2)
     }
     .signup-text
     {
@@ -114,8 +114,8 @@
     }
     .signup-text a:hover
     {
-        color: #4fed4f;
-        text-shadow: 0 0 8px rgb(79, 237, 79, 0.5);
+        color: #B9A5D6;
+        text-shadow: 0 0 8px rgba(185, 165, 214, 0.5);
     }
     #floatingcharacters
     {
@@ -328,9 +328,11 @@
                 password: password
             };
 
-            localStorage.setItem("account", JSON.stringfy(account));
+            localStorage.setItem("account", JSON.stringify(account));
 
             alert("Account created succesfully!");
+
+            window.location.href = "login.html";
         });
     </script>
 </body>

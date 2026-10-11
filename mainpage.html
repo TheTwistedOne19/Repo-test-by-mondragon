@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Dusky Library</title>
+<style>
+    :root
+    {
+        --background-color: #0D0B12;
+        --surface-color: #17131F;
+        --accent-color: #B9A5D6;
+        --accent-hover: #D0BFE8;
+        --text-color: #E8E2EF;
+        --muted-text: #AAA2B7;
+        --border-color: rgba(185, 165, 214, 0.3);
+    }
+    .library-header
+    {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 30px;
+
+        padding: 20px 30px 35px;
+    }
+    .library-heading h1
+    {
+        color: var(--accent-color);
+        font-size: 36px;
+        text-align: left;
+        margin: 0 0 10px;
+    }
+    .library-subtitle 
+    {
+        max-width: 500px;
+        margin: 0;
+        padding: 0;
+        text-align: left;
+        line-height: 1.6;
+        font-size: 14px;
+    }
+    .library-controls
+    {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 0;
+    }
+
+    .library-controls input,
+    .library-controls select
+    {
+        -sizing: border-box;
+        padding: 10px 12px;
+        background-color: #100D17;
+        color: var(--text-color);
+        border: 1px solid rgba(185, 165, 214, 0.3);
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+        transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
+    }
+    .library-controls input
+    {
+        width: 200px;
+    }
+
+    .library-controls input:hover,
+    .library-controls select:hover
+    {
+        border-color: rgba(185, 165, 214, 0.65);
+        background-color: #191322;
+    }
+
+    .library-controls input:focus,
+    .library-controls select:focus
+    {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 10px rgba(185, 165, 214, 0.2);
+    }
+
+    @media (max-width: 850px)
+    {
+        nav
+        {
+            flex-wrap: wrap;
+            padding: 16px 20px;
+        }
+
+        .nav-right
+        {
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .library-controls
+        {
+            flex-wrap: wrap;
+        }
+
+        .library-controls input
+        {
+            width: 170px;
+        }
+    }
+
+    @media (max-width: 520px)
+    {
+        .nav-right
+        {
+            width: 100%;
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .library-controls
+        {
+            width: 100%;
+        }
+
+        .library-controls input
+        {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .library-controls select
+        {
+            max-width: 45%;
+        }
+    }
+    body
+    {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+    nav
+    {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 25px;
+        padding: 16px 35px;
+
+        background: linear-gradient(
+            110deg,
+            #21192E,
+            #17131F 65%,
+            #20182B
+        );
+
+        border-bottom: 1px solid rgba(185, 165, 214, 0.35);
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+    }
+    .logo
+    {
+        color: var(--accent-color);
+        font-size: 24px;
+        font-weight: bold;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    .logo:hover
+    {
+        color: var(--accent-hover);
+        text-shadow: 0 0 12px rgba(185, 165, 214, 0.3);
+    }
+    .nav-right
+    {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+    .menu-button{
+        width: 44px;
+        height: 44px;
+        flex-shrink: 0;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 6px;
+
+        background-color: #21192E;
+        border: 1px solid var(--border-color);
+        border-radius: 9px;
+        cursor: pointer;
+
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+    .menu-button:hover
+    {
+        background-color: #30243F;
+        border-color: var(--accent-color);
+    }
+    .menu-button span
+    {
+        width: 20px;
+        height: 2px;
+        background-color: var(--accent-hover);
+        border-radius: 2px;
+        transition: transform 0.3s, opacity 0.3s;
+    }
+    .panel-overlay
+    {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+
+        background-color: rgba(0, 0, 0, 0.65);
+        opacity: 0;
+        visibility: hidden;
+
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+    .panel-overlay.open
+    {
+        opacity: 1;
+        visibility: visible;
+    }
+    .side-panel
+    {
+        position: fixed;
+        top: 0;
+        right: 0;
+        z-index: 1001;
+
+        width: 25%;
+        min-width: 300px;
+        max-width: 420px;
+        height: 100vh;
+        height: 100dvh;
+
+        display: flex;
+        flex-direction: column;
+
+        padding: 25px;
+        background: linear-gradient(
+        160deg,
+        #21192E,
+        #17131F 60%,
+        #100D17
+    );
+        border-left: 1px solid var(--border-color);
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
+
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: transform 0.3s ease, visibility 0.3s;
+
+        overflow-y: auto;
+    }
+    .side-panel.open
+    {
+        transform: translateX(0);
+        visibility: visible;
+    }
+    .panel-header
+    {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .panel-title
+    {
+        color: var(--accent-color);
+        font-size: 20px;
+        font-weight: bold;
+    }
+    .close-button
+    {
+        width: 36px;
+        height: 36px;
+
+        background: transparent;
+        color: var(--muted-text);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+
+        font-size: 26px;
+        line-height: 1;
+        cursor: pointer;
+        transition: color 0.3s, background-color 0.3s;
+    }
+
+    .close-button:hover
+    {
+        color: var(--accent-hover);
+        background-color: #30243F;
+    }
+    .mini-profile
+    {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        margin-top: 25px;
+        padding: 16px;
+
+        background-color: rgba(185, 165, 214, 0.06);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+
+        text-decoration: none;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+    .mini-profile:hover
+    {
+    background-color: rgba(185, 165, 214, 0.12);
+    border-color: var(--accent-color);
+    }
+    .mini-avatar
+    {
+        width: 55px;
+        height: 55px;
+        flex-shrink: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: #30243F;
+        color: var(--accent-hover);
+        border: 1px solid var(--accent-color);
+        border-radius: 50%;
+
+        font-size: 23px;
+        font-weight: bold;
+    }
+
+    .mini-profile-info
+    {
+        min-width: 0;
+    }
+
+    .mini-profile-info h3
+    {
+    color: var(--text-color);
+    font-size: 15px;
+    margin: 0 0 5px;
+    overflow-wrap: anywhere;
+    }
+
+    .mini-profile-info p
+    {
+    color: var(--muted-text);
+        font-size: 12px;
+        margin: 0 0 8px;
+        overflow-wrap: anywhere;
+    }
+
+    .mini-profile-info span
+    {
+        color: var(--accent-hover);
+        font-size: 12px;
+    }
+    .panel-divider
+    {
+        height: 1px;
+        background-color: var(--border-color);
+        margin: 22px 0;
+    }
+    .panel-links
+    {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .panel-links a
+    {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+
+        padding: 14px;
+        color: var(--text-color);
+        text-decoration: none;
+
+        border: 1px solid transparent;
+        border-radius: 8px;
+        transition: background-color 0.3s, border-color 0.3s,
+                    color 0.3s;
+    }
+
+    .panel-links a:hover
+    {
+        background-color: #30243F;
+        border-color: var(--border-color);
+        color: var(--accent-hover);
+    }
+
+    .menu-icon
+    {
+        width: 24px;
+        text-align: center;
+        color: var(--accent-color);
+        font-size: 20px;
+    }
+    .panel-spacer
+    {
+        flex: 1;
+        min-height: 35px;
+    }
+
+    .panel-footer
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        padding-top: 20px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .panel-footer a
+    {
+        color: var(--muted-text);
+        font-size: 13px;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+    .panel-footer a:hover
+    {
+        color: var(--accent-hover);
+    }
+    .panel-footer span
+    {
+        color: #655775;
+    }
+    @media (max-width: 750px)
+    {
+        .side-panel
+        {
+            width: 85%;
+            min-width: 0;
+            max-width: 360px;
+        }
+    }
+
+    @media (max-width: 520px)
+    {
+        nav
+        {
+            padding: 14px 18px;
+            gap: 12px;
+        }
+
+        .logo
+        {
+            font-size: 19px;
+        }
+
+        .nav-right
+        {
+            gap: 10px;
+        }
+
+        .library-controls input
+        {
+            width: 145px;
+        }
+
+        .library-controls select
+        {
+            max-width: 115px;
+        }
+    }
+    main
+    {
+        padding: 30px 0;
+    }
+    h1
+    {
+        color: var(--accent-color);
+        font-size: 42px;
+        text-align: center;
+        margin: 25px 20px;
+    }
+    p
+    {
+        color: var(--muted-text);
+        font-family: Verdana, Tahoma, sans-serif;
+    }
+    .story-section
+    {
+        padding: 25px 30px 35px;
+        border-bottom: 2px solid #30283B;
+        text-align: left;
+    }
+    .story-section h2
+    {
+        color: var(--text-color);
+        font-size: 22px;
+        font-weight: normal;
+        margin: 0 0 20px;
+    }
+    .story-grid
+    {
+        display: flex;
+        gap: 30px;
+
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        padding: 5px 5px 20px;
+        scroll-behavior: smooth;
+        scroll-snap-type: x mandatory;
+    }
+    .story-card 
+    {
+        box-sizing: border-box;
+        flex: 0 0 175px;
+        padding: 0;
+        background-color: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        overflow: hidden;
+        scroll-snap-align: start;
+        transition: border-color 0.3s, transform 0.3s;
+    }
+    .story-card img 
+    {
+        display: block;
+        width: 100%;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+    }
+    .story-details 
+    {
+        padding: 10px;
+    }
+    .story-details h3 
+    {
+        margin: 0 0 8px;
+        color: var(--accent-color);
+        font-size: 16px;
+        min-height: 38px;
+    }
+    .story-details p 
+    {
+        margin: 0 0 8px;
+        color: var(--muted-text);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+    .story-details span 
+    {
+        color: var(--accent-hover);
+        font-size: 12px;
+    }
+    .story-card:hover
+    {
+        transform: translateY(-4px);
+        border-color: var(--accent-color);
+    }
+</style>
+</head>
+<body>
+    <nav>
+        <a href="mainpage.html" class="logo">The Dusky Library</a>
+
+        <div class="nav-right">
+            <div class="library-controls">
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search stories..."
+                >
+
+                <select id="categoryFilter">
+                    <option value="all">All Stories</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="horror">Horror</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="romance">Romance</option>
+                    <option value="historical">Historical</option>
+                    <option value="sci-fi">Sci-fi</option>
+                    <option value="adventure">Adventure</option>
+                    <option value="psychological">Psychological</option>
+                    <option value="sports">Sports</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <button
+                class="menu-button"
+                id="menuButton"
+                type="button"
+                aria-label="Open navigation menu"
+                aria-expanded="false"
+                aria-controls="sidePanel"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+    <div class="panel-overlay" id="panelOverlay"></div>
+    <aside
+        class="side-panel"
+        id="sidePanel"
+        aria-hidden="true"
+        inert
+    >
+    <div class="panel-header">
+        <span class="panel-title">Your Library</span>
+
+        <button
+            class="close-button"
+            id="closePanel"
+            type="button"
+            aria-label="Close navigation menu"
+        >
+            &times;
+        </button>
+    </div>
+    <a href="profile.html" class="mini-profile">
+        <div class="mini-avatar" id="miniAvatar">?</div>
+
+        <div class="mini-profile-info">
+            <h3 id="panelUsername">Your Name</h3>
+            <p id="panelHandle">@yourusername</p>
+            <span>View your profile</span>
+        </div>
+    </a>
+    <div class="panel-divider"></div>
+    <div class="panel-links">
+        <a href="profile.html">
+            <span class="menu-icon">▤</span>
+            Your Shelf
+        </a>
+
+        <a href="settings.html">
+            <span class="menu-icon">⚙</span>
+            Settings
+        </a>
+    </div>
+    <div class="panel-spacer"></div>
+    <div class="panel-footer">
+        <a href="contact.html">Contact Us</a>
+        <span>|</span>
+        <a href="about.html">About Us</a>
+    </div>
+</aside>
+    <main>
+        <div class="library-header">
+            <div class="library-heading">
+                <h1>Welcome to the Library</h1>
+                <p class="library-subtitle">
+                A quiet corner for writers and such.
+                Every story leaves a shadow. Because every experience, whether joyful, painful, or forgotten, leaves a trace behind in memory and consequence.
+                </p>
+            </div>
+        </div>
+        <section class="story-section">
+
+            <h2>Trending</h2>
+
+            <div class="story-grid">
+
+                <article class="story-card" data-category="fantasy">
+                    <img src="imgs/default_cover.jpg" alt="Example Fantasy cover">
+
+                    <div class="story-details">
+                        <h3>Example Fantasy</h3>
+                        <p>Example</p>
+                        <span>Fantasy</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="horror">
+                    <img src="imgs/default_cover.jpg" alt="Example Horror cover">
+
+                    <div class="story-details">
+                        <h3>Example Horror</h3>
+                        <p>Example</p>
+                        <span>Horror</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="mystery">
+                    <img src="imgs/default_cover.jpg" alt="Example Mystery cover">
+
+                    <div class="story-details">
+                        <h3>Example Mystery</h3>
+                        <p>Example</p>
+                        <span>Mystery</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="romance">
+                    <img src="imgs/default_cover.jpg" alt="Example Romance cover">
+
+                    <div class="story-details">
+                        <h3>Example Romance</h3>
+                        <p>Example</p>
+                        <span>Romance</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="sci-fi">
+                    <img src="imgs/default_cover.jpg" alt="Example Sci-fi cover">
+
+                    <div class="story-details">
+                        <h3>Example Sci-fi</h3>
+                        <p>Example</p>
+                        <span>Sci-fi</span>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <section class="story-section">
+
+            <h2>Top Liked</h2>
+
+            <div class="story-grid">
+
+                <article class="story-card" data-category="historical">
+                    <img src="imgs/default_cover.jpg" alt="Example Adventure cover">
+
+                    <div class="story-details">
+                        <h3>Example Historical</h3>
+                        <p>Example</p>
+                        <span>Historical</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="adventure">
+                    <img src="imgs/default_cover.jpg" alt="Example Adventure cover">
+
+                    <div class="story-details">
+                        <h3>Example Adventure</h3>
+                        <p>Example</p>
+                        <span>Adventure</span>
+                    </div>
+                </article>
+
+                <article class="story-card" data-category="mystery">
+                        <img src="imgs/default_cover.jpg" alt="Example Mystery cover">
+
+                    <div class="story-details">
+                        <h3>Example Mystery</h3>
+                        <p>Example</p>
+                        <span>Mystery</span>
+                    </div>
+                </article>
+
+            </div>
+
+        </section>
+    </main>
+    <script>
+        
+    const menuButton = document.getElementById("menuButton");
+    const sidePanel = document.getElementById("sidePanel");
+    const panelOverlay = document.getElementById("panelOverlay");
+    const closeButton = document.getElementById("closePanel");
+    
+    function openPanel()
+    {
+        sidePanel.classList.add("open");
+        panelOverlay.classList.add("open");
+
+        sidePanel.removeAttribute("inert");
+        sidePanel.setAttribute("aria-hidden", "false");
+
+        menuButton.setAttribute("aria-expanded", "true");
+        menuButton.setAttribute("aria-label", "Close navigation menu");
+
+        document.body.style.overflow = "hidden";
+        closeButton.focus();
+    }
+    function closePanel()
+    {
+        sidePanel.classList.remove("open");
+        panelOverlay.classList.remove("open");
+
+        sidePanel.setAttribute("inert", "");
+        sidePanel.setAttribute("aria-hidden", "true");
+
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute("aria-label", "Open navigation menu");
+
+        document.body.style.overflow = "";
+        menuButton.focus();
+    }
+    menuButton.addEventListener("click", () =>
+    {
+        if (sidePanel.classList.contains("open"))
+        {
+            closePanel();
+        }
+        else
+        {
+        openPanel();
+        }
+    });
+    closeButton.addEventListener("click", closePanel);
+    panelOverlay.addEventListener("click", closePanel);
+    document.addEventListener("keydown", (event) => {
+        if (
+            event.key === "Escape" &&
+            sidePanel.classList.contains("open")
+        )
+        {
+            closePanel();
+        }
+    });
+    const savedAccount = JSON.parse(
+        localStorage.getItem("account") || "null"
+    );
+    if (savedAccount && savedAccount.username)
+    {
+        const username = savedAccount.username;
+
+        document.getElementById("panelUsername").textContent = username;
+        document.getElementById("panelHandle").textContent =
+            "@" + username;
+
+        document.getElementById("miniAvatar").textContent =
+            username.charAt(0).toUpperCase();
+    }
+    </script>
+</body>
+</html>
